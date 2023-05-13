@@ -1,8 +1,8 @@
 # yogiga
 
 ##환경
-jdk17
-springboot 3.0.6
+1. jdk17
+2. springboot 3.0.6
 
 ## 설치방법
 1. jdk17 설치
