@@ -1,6 +1,6 @@
 # yogiga
 
-##환경
+## 환경
 1. jdk17
 2. springboot 3.0.6
 
