@@ -1,13 +1,21 @@
 package com.yogiga.yogiga.user.dto;
 
+import com.yogiga.yogiga.user.enums.Role;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
 
 @Getter
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
-    private String userId;
-    private String email;
-    private String nickname;
+    private Role role;
 
+    private String userId;
+
+    private String password;
+
+    private String email;
+
+    private String nickname;
 }
