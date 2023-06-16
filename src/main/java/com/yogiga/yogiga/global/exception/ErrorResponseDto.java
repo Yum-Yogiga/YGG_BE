@@ -1,4 +1,4 @@
-package com.yogiga.yogiga.exception;
+package com.yogiga.yogiga.global.exception;
 
 import lombok.Builder;
 import lombok.Data;

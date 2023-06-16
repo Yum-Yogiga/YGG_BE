@@ -6,14 +6,8 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpDto {
-
+public class SignInDto {
     private String userId;
 
     private String password;
-
-    private String email;
-
-    private String nickname;
-
 }

@@ -1,4 +1,4 @@
-package com.yogiga.yogiga.exception;
+package com.yogiga.yogiga.global.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

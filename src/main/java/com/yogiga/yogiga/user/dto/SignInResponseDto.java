@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpResponseDto {
+public class SignInResponseDto {
     private boolean success;
     private String message;
     private String token;
