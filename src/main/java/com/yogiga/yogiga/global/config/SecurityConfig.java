@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/sign-up", "/sign-in").permitAll()
+                .requestMatchers("/sign-up", "/sign-in", "email-verification").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
