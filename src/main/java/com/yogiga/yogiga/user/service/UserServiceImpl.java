@@ -13,6 +13,7 @@ import com.yogiga.yogiga.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService{
                 .build();
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
 
         SignUpResponseDto signUpResponseDto = new SignUpResponseDto();
 
@@ -53,6 +55,7 @@ public class UserServiceImpl implements UserService{
             signUpResponseDto.setSuccess(true);
             signUpResponseDto.setMessage("회원가입 성공");
             signUpResponseDto.setToken(jwtToken);
+            signUpResponseDto.setRefreshToken(refreshToken);
         }
         return signUpResponseDto;
     }
@@ -60,25 +63,28 @@ public class UserServiceImpl implements UserService{
     @Override
     public SignInResponseDto signIn(SignInDto signInDto) {
         //인증
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        signInDto.getUserId(),
-                        signInDto.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            signInDto.getUserId(),
+                            signInDto.getPassword()
+                    )
+            );
+        } catch (AuthenticationException e) {
+            throw new CustomException(ErrorCode.AUTHENTICATION_ERROR,"비밀번호가 일치하지 않습니다. ");
+        }
 
         Optional<User> optionalUser = userRepository.findByUserId(signInDto.getUserId());
         User user = optionalUser.get();
 
-        if (!passwordEncoder.matches(signInDto.getPassword(), user.getPassword())) {
-            throw new RuntimeException();
-        }
         String jwtToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
 
         return SignInResponseDto.builder()
                 .success(true)
                 .message("로그인 성공")
                 .token(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 }

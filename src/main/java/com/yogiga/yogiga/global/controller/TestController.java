@@ -1,4 +1,4 @@
-package com.yogiga.yogiga.global.swagger.controller;
+package com.yogiga.yogiga.global.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
