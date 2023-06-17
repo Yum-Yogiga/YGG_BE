@@ -3,6 +3,7 @@ package com.yogiga.yogiga.user.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yogiga.yogiga.global.exception.CustomException;
 import com.yogiga.yogiga.global.exception.ErrorCode;
+import com.yogiga.yogiga.global.jwt.JwtPayloadDto;
 import com.yogiga.yogiga.global.jwt.JwtService;
 import com.yogiga.yogiga.user.dto.SignInDto;
 import com.yogiga.yogiga.user.dto.SignInResponseDto;
@@ -48,8 +49,11 @@ public class UserServiceImpl implements UserService{
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
+
+        JwtPayloadDto jwtPayloadDto = JwtPayloadDto.toDto(user);
+
+        String jwtToken = jwtService.generateToken(jwtPayloadDto);
+        String refreshToken = jwtService.generateRefreshToken(jwtPayloadDto);
 
         SignUpResponseDto signUpResponseDto = new SignUpResponseDto();
 
@@ -83,8 +87,10 @@ public class UserServiceImpl implements UserService{
         Optional<User> optionalUser = userRepository.findByUserId(signInDto.getUserId());
         User user = optionalUser.get();
 
-        String jwtToken = jwtService.generateToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
+        JwtPayloadDto jwtPayloadDto = JwtPayloadDto.toDto(user);
+
+        String jwtToken = jwtService.generateToken(jwtPayloadDto);
+        String refreshToken = jwtService.generateRefreshToken(jwtPayloadDto);
 
         return SignInResponseDto.builder()
                 .success(true)
@@ -104,17 +110,21 @@ public class UserServiceImpl implements UserService{
             return;
         }
         refreshToken = authHeader.substring(7); //Bearer
-        userEmail = jwtService.extractUsername(refreshToken);//JWT token 으로부터 userEmail 뽑아냄
+        userEmail = jwtService.extractUsername(refreshToken);//JWT token 으로부터 userID 뽑아냄
         if (userEmail != null) {
             Optional<User> optionalUser = this.userRepository.findByEmail(userEmail);
 
             if (optionalUser.isEmpty()) {
                 throw new CustomException(ErrorCode.USER_NOT_FOUND_ERROR, "일치하는 회원이 존재하지 않습니다. ");
             }
-            UserDetails user = optionalUser.get();
+            
+            UserDetails userDetails = optionalUser.get();
+            User user = optionalUser.get();
 
-            if (jwtService.isTokenValid(refreshToken, user)) {
-                String accessToken = jwtService.generateRefreshToken(user);
+            JwtPayloadDto jwtPayloadDto = JwtPayloadDto.toDto(user);
+
+            if (jwtService.isTokenValid(refreshToken, userDetails)) {
+                String accessToken = jwtService.generateRefreshToken(jwtPayloadDto);
                 SignInResponseDto authResponse = SignInResponseDto.builder()
                         .token(accessToken)
                         .refreshToken(refreshToken)

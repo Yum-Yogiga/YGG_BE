@@ -27,13 +27,17 @@ public class JwtService {
 
     private String buildToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails,
+            JwtPayloadDto jwtPayloadDto ,
             long expiration
     ) {
+        extraClaims.put("userId", jwtPayloadDto.getUserId());
+        extraClaims.put("nickname", jwtPayloadDto.getNickname());
+        extraClaims.put("role", jwtPayloadDto.getRole());
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(jwtPayloadDto.getEmail())
+                .setIssuer("YOGIGA")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
@@ -69,19 +73,19 @@ public class JwtService {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(JwtPayloadDto jwtPayloadDto) {
+        return generateToken(new HashMap<>(), jwtPayloadDto);
     }
     public String generateToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails
+            JwtPayloadDto jwtPayloadDto
     ) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+        return buildToken(extraClaims, jwtPayloadDto, jwtExpiration);
     }
     public String generateRefreshToken(
-            UserDetails userDetails
+            JwtPayloadDto jwtPayloadDto
     ) {
-        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
+        return buildToken(new HashMap<>(), jwtPayloadDto, refreshExpiration);
     }
 
 }
