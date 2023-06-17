@@ -1,5 +1,6 @@
 package com.yogiga.yogiga.user.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yogiga.yogiga.global.exception.CustomException;
 import com.yogiga.yogiga.global.exception.ErrorCode;
 import com.yogiga.yogiga.global.jwt.JwtService;
@@ -10,13 +11,18 @@ import com.yogiga.yogiga.user.dto.SignUpResponseDto;
 import com.yogiga.yogiga.user.entity.User;
 import com.yogiga.yogiga.user.enums.Role;
 import com.yogiga.yogiga.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -86,5 +92,35 @@ public class UserServiceImpl implements UserService{
                 .token(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    @Override
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String refreshToken;
+        final String userEmail;
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return;
+        }
+        refreshToken = authHeader.substring(7); //Bearer
+        userEmail = jwtService.extractUsername(refreshToken);//JWT token 으로부터 userEmail 뽑아냄
+        if (userEmail != null) {
+            Optional<User> optionalUser = this.userRepository.findByEmail(userEmail);
+
+            if (optionalUser.isEmpty()) {
+                throw new CustomException(ErrorCode.USER_NOT_FOUND_ERROR, "일치하는 회원이 존재하지 않습니다. ");
+            }
+            UserDetails user = optionalUser.get();
+
+            if (jwtService.isTokenValid(refreshToken, user)) {
+                String accessToken = jwtService.generateRefreshToken(user);
+                SignInResponseDto authResponse = SignInResponseDto.builder()
+                        .token(accessToken)
+                        .refreshToken(refreshToken)
+                        .build();
+                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+            }
+        }
     }
 }

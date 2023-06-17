@@ -20,8 +20,10 @@ public class JwtService {
 
     @Value("${security.jwt.secret}")
     private String secretKey;
-    private long jwtExpiration = 1000L * 60 * 24;
-    private long refreshExpiration = 1000L * 60 * 60 * 24;
+    @Value("${security.jwt.expiration}")
+    private long jwtExpiration;
+    @Value("${security.jwt.refresh-token.expiration}")
+    private long refreshExpiration;
 
     private String buildToken(
             Map<String, Object> extraClaims,
