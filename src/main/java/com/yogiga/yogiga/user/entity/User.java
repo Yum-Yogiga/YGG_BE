@@ -1,5 +1,6 @@
 package com.yogiga.yogiga.user.entity;
 
+import com.yogiga.yogiga.global.entity.BaseTimeEntity;
 import com.yogiga.yogiga.user.dto.UserDto;
 import com.yogiga.yogiga.user.enums.Role;
 import jakarta.persistence.*;
@@ -18,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Table(name = "users")
-public class User implements UserDetails {
+public class User extends BaseTimeEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,4 +1,4 @@
-package com.yogiga.yogiga.global.swagger.config;
+package com.yogiga.yogiga.global.config;
 
 
 import io.swagger.v3.oas.models.Components;
