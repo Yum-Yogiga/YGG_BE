@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         jwt = authHeader.substring(7); //Bearer
-        userEmail = jwtService.extractUsername(jwt);//JWT token 으로부터 userEmail 뽑아냄
+        userEmail = jwtService.extractUserEmail(jwt);//JWT token 으로부터 userEmail 뽑아냄
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {

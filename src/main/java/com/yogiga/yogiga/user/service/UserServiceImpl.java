@@ -72,20 +72,24 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public SignInResponseDto signIn(SignInDto signInDto) {
-        //인증
+
+        Optional<User> optionalUser = userRepository.findByUserId(signInDto.getUserId());
+        if (optionalUser.isEmpty()) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND_ERROR, "일치하는 회원이 존재하지 않습니다. ");
+        }
+
+        User user = optionalUser.get();
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            signInDto.getUserId(),
+                            user.getEmail(),
                             signInDto.getPassword()
                     )
             );
         } catch (AuthenticationException e) {
             throw new CustomException(ErrorCode.AUTHENTICATION_ERROR,"비밀번호가 일치하지 않습니다. ");
         }
-
-        Optional<User> optionalUser = userRepository.findByUserId(signInDto.getUserId());
-        User user = optionalUser.get();
 
         JwtPayloadDto jwtPayloadDto = JwtPayloadDto.toDto(user);
 
@@ -110,7 +114,7 @@ public class UserServiceImpl implements UserService{
             return;
         }
         refreshToken = authHeader.substring(7); //Bearer
-        userEmail = jwtService.extractUsername(refreshToken);//JWT token 으로부터 userID 뽑아냄
+        userEmail = jwtService.extractUserEmail(refreshToken);//JWT token 으로부터 userEmail 뽑아냄
         if (userEmail != null) {
             Optional<User> optionalUser = this.userRepository.findByEmail(userEmail);
 
@@ -126,6 +130,8 @@ public class UserServiceImpl implements UserService{
             if (jwtService.isTokenValid(refreshToken, userDetails)) {
                 String accessToken = jwtService.generateRefreshToken(jwtPayloadDto);
                 SignInResponseDto authResponse = SignInResponseDto.builder()
+                        .success(true)
+                        .message("success")
                         .token(accessToken)
                         .refreshToken(refreshToken)
                         .build();

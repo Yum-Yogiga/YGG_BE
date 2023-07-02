@@ -62,7 +62,7 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    public String extractUsername(String token) {
+    public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
@@ -70,7 +70,7 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
+        final String username = extractUserEmail(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
     public String generateToken(JwtPayloadDto jwtPayloadDto) {
