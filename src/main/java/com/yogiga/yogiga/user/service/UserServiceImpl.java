@@ -41,6 +41,9 @@ public class UserServiceImpl implements UserService{
         if (userRepository.findByNickname(signUpDto.getNickname()).isPresent()) {
             throw new CustomException(ErrorCode.USER_DUPLICATION_ERROR, "이미 사용 중인 닉네임 입니다. ");
         }
+        if (userRepository.findByUserId(signUpDto.getUserId()).isPresent()) {
+            throw new CustomException(ErrorCode.USER_DUPLICATION_ERROR, "이미 사용 중인 아이디 입니다. ");
+        }
         User user = User.builder()
                 .userId(signUpDto.getUserId())
                 .password(passwordEncoder.encode(signUpDto.getPassword()))
