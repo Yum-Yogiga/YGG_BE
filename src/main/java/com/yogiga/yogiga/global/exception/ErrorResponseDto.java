@@ -1,23 +1,20 @@
 package com.yogiga.yogiga.global.exception;
 
-import lombok.Builder;
 import lombok.Data;
-import org.springframework.http.ResponseEntity;
 @Data
-@Builder
 public class ErrorResponseDto {
     private int httpStatus;
     private String code;
     private String message;
 
-    public static ResponseEntity<ErrorResponseDto> toResponseDto(ErrorCode e){
-        return ResponseEntity
-                .status(e.getHttpStatus())
-                .body(ErrorResponseDto.builder()
-                        .httpStatus(e.getHttpStatus())
-                        .code(e.getCode())
-                        .message(e.getMessage())
-                        .build()
-                );
+    public ErrorResponseDto(ErrorCode errorCode, String message) {
+        this.httpStatus = errorCode.getHttpStatus();
+        this.code = errorCode.getCode();
+        this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return httpStatus + " " + code + " " + message;
     }
 }
