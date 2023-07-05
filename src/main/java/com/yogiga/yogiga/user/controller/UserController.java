@@ -10,9 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -30,8 +28,16 @@ public class UserController {
         return ResponseEntity.ok(userService.signIn(signInDto));
     }
 
+    @GetMapping(value = "/sign-in/oauth")
+    public SignInResponseDto signInOAuth(@RequestParam String token, @RequestParam String refreshToken) {
+        SignInResponseDto signInResponseDto = new SignInResponseDto(true, "Success", token, refreshToken);
+        return signInResponseDto;
+    }
+
     @PostMapping("/refresh-token")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         userService.refreshToken(request, response);
     }
+
+
 }
