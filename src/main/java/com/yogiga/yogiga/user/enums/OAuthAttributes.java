@@ -11,7 +11,7 @@ public enum OAuthAttributes {
         UserDto userDto = new UserDto();
         userDto.setEmail((String) attributes.get("email"));
         userDto.setUserId((String) attributes.get("email"));
-        userDto.setNickname((String) attributes.get("email"));
+        userDto.setNickname((String) attributes.get("nickname"));
         return userDto;
     }),
 
@@ -21,6 +21,8 @@ public enum OAuthAttributes {
         UserDto userDto = new UserDto();
         userDto.setEmail((String) response.get("email"));
         userDto.setUserId(((String) response.get("email")));
+        userDto.setNickname(((String) response.get("nickname")));
+
         return userDto;
     }),
 
@@ -33,6 +35,8 @@ public enum OAuthAttributes {
         UserDto userDto = new UserDto();
         userDto.setNickname((String) kakaoProfile.get("nickname"));
         userDto.setEmail((String) kakaoAccount.get("email"));
+        userDto.setUserId((String) kakaoAccount.get("email"));
+
         return userDto;
     });
 
