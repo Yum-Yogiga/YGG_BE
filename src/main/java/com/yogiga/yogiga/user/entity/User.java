@@ -3,6 +3,7 @@ package com.yogiga.yogiga.user.entity;
 import com.yogiga.yogiga.global.entity.BaseTimeEntity;
 import com.yogiga.yogiga.user.dto.UserDto;
 import com.yogiga.yogiga.user.enums.Role;
+import com.yogiga.yogiga.user.enums.SocialType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -28,18 +29,20 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Size(min = 5, max = 25)
     private String userId;
 
-    @Column(nullable = false)
     private String password;
 
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(unique = true)
     @Size(min = 1, max = 30)
     private String nickname;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private SocialType socialType;
 
     public static User toEntity(UserDto userDto) {
         return User.builder()
@@ -47,7 +50,13 @@ public class User extends BaseTimeEntity implements UserDetails {
                 .userId(userDto.getUserId())
                 .email(userDto.getEmail())
                 .nickname(userDto.getNickname())
+                .socialType(userDto.getSocialType())
                 .build();
+    }
+
+    public void update(String userId, String email) {
+        this.userId = userId;
+        this.email = email;
     }
 
     @Override

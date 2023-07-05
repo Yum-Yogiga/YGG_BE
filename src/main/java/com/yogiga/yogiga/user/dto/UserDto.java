@@ -1,6 +1,7 @@
 package com.yogiga.yogiga.user.dto;
 
 import com.yogiga.yogiga.user.enums.Role;
+import com.yogiga.yogiga.user.enums.SocialType;
 import lombok.*;
 
 @Data
@@ -17,4 +18,7 @@ public class UserDto {
     private String email;
 
     private String nickname;
+
+    private SocialType socialType;
+
 }
