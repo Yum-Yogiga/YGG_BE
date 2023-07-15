@@ -17,13 +17,14 @@ public class OpenApiConfig {
                 .title("YOGIGA API Document")
                 .version("1.0.0");
 
-        String jwtName = "jwtAuth";
+        String jwtName = "Authorization";
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtName);
         Components components = new Components()
                 .addSecuritySchemes(jwtName, new SecurityScheme()
                         .name(jwtName)
-                        .type(SecurityScheme.Type.APIKEY)
-                        .in(SecurityScheme.In.HEADER));
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT"));
 
         return new OpenAPI()
                 .addSecurityItem(securityRequirement)
