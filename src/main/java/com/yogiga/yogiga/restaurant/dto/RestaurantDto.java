@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 public class RestaurantDto {
@@ -16,4 +18,6 @@ public class RestaurantDto {
     private String tel;
 
     private String openingHours;
+
+    private List<MenuDto> menuDtoList;
 }

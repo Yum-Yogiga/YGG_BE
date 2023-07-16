@@ -32,4 +32,8 @@ public class Menu {
                 .price(menuDto.getPrice())
                 .build();
     }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
 }

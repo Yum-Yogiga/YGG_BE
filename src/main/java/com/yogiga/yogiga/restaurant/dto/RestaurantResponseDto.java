@@ -5,6 +5,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,6 +26,8 @@ public class RestaurantResponseDto {
 
     private String openingHours;
 
+    private List<MenuDto> menuList;
+
     @Builder
     public static RestaurantResponseDto toDto(Restaurant restaurant) {
         return RestaurantResponseDto.builder()
@@ -30,6 +35,9 @@ public class RestaurantResponseDto {
                 .address(restaurant.getAddress())
                 .tel(restaurant.getTel())
                 .openingHours(restaurant.getOpeningHours())
+                .menuList(restaurant.getMenuList().stream()
+                        .map(MenuDto::toDto)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

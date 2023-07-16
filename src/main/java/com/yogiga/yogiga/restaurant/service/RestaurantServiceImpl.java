@@ -2,9 +2,12 @@ package com.yogiga.yogiga.restaurant.service;
 
 import com.yogiga.yogiga.global.exception.CustomException;
 import com.yogiga.yogiga.global.exception.ErrorCode;
+import com.yogiga.yogiga.restaurant.dto.MenuDto;
 import com.yogiga.yogiga.restaurant.dto.RestaurantDto;
 import com.yogiga.yogiga.restaurant.dto.RestaurantResponseDto;
+import com.yogiga.yogiga.restaurant.entity.Menu;
 import com.yogiga.yogiga.restaurant.entity.Restaurant;
+import com.yogiga.yogiga.restaurant.repository.MenuRepository;
 import com.yogiga.yogiga.restaurant.repository.RestaurantRepository;
 import com.yogiga.yogiga.user.entity.User;
 import com.yogiga.yogiga.user.util.SecurityUtil;
@@ -14,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +25,8 @@ import java.util.Optional;
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+
+    private final MenuRepository menuRepository;
 
     @Override
     public RestaurantResponseDto getResById(Long restaurantId) {
@@ -38,8 +44,17 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Long createRestaurant(RestaurantDto restaurantDto) {
         User user = SecurityUtil.getUser();
         Restaurant restaurant = Restaurant.toEntity(restaurantDto);
+        List<MenuDto> menuDtoList = restaurantDto.getMenuDtoList();
 
+        List<Menu> menuList = menuDtoList.stream()
+                .map(menuDto -> {
+                    Menu menu = Menu.toEntity(menuDto);
+                    menu.setRestaurant(restaurant); // 식당과의 연관관계 설정
+                    return menu;
+                }).toList();
         restaurantRepository.save(restaurant);
+        menuRepository.saveAll(menuList);
+
         return restaurant.getId();
     }
 
