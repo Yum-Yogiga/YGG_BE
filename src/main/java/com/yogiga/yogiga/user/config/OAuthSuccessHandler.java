@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -22,7 +23,8 @@ import java.nio.charset.StandardCharsets;
     public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtService jwtService;
-    private static final String REDIRECT_URI = "http://localhost:8080/sign-in/oauth";
+    @Value("${oauth2.google.redirect.url}")
+    private String REDIRECT_URI;
 
 
     @Override
