@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -15,17 +16,19 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtService jwtService;
-    private static final String REDIRECT_URI = "https://yogiga-api.site/swagger-ui/index.html";
+    private static final String REDIRECT_URI = "http://localhost:8080/sign-in/oauth";
 
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        log.info("OAuth2.0 로그인 성공");
+
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
         JwtPayloadDto jwtPayloadDto = JwtPayloadDto.builder()
