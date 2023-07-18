@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtService jwtService;
-    private static final String REDIRECT_URI = "https://www.yogiga-api.site//sign-in/oauth";
+    private static final String REDIRECT_URI = "https://yogiga-api.site/swagger-ui/index.html";
 
 
     @Override
