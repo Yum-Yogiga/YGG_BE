@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+    public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtService jwtService;
     private static final String REDIRECT_URI = "http://localhost:8080/sign-in/oauth";
