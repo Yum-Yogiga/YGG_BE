@@ -29,18 +29,21 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final MenuRepository menuRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public RestaurantResponseDto getResById(Long restaurantId) {
         Restaurant restaurant = findRestaurant(restaurantId);
         return RestaurantResponseDto.toDto(restaurant);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<RestaurantResponseDto> getAllRes(Pageable pageable) {
         Page<Restaurant> restaurantPage = restaurantRepository.findAllByOrderByIdDesc(pageable);
         return restaurantPage.map(RestaurantResponseDto::toDto);
     }
 
     @Override
+    @Transactional
     public Long createRestaurant(RestaurantDto restaurantDto) {
         User user = SecurityUtil.getUser();
         Restaurant restaurant = Restaurant.toEntity(restaurantDto);
@@ -59,6 +62,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @Transactional
     public Long updateRestaurant(Long restaurantId, RestaurantDto restaurantDto) {
         User user = SecurityUtil.getUser();
         Restaurant restaurant = findRestaurant(restaurantId);
@@ -68,6 +72,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @Transactional
     public void deleteRestaurant(Long restaurantId) {
         Restaurant restaurant = findRestaurant(restaurantId);
         restaurantRepository.delete(restaurant);

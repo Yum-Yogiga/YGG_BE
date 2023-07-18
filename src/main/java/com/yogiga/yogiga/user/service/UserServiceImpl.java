@@ -22,6 +22,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public class UserServiceImpl implements UserService{
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     @Override
+    @Transactional
     public SignUpResponseDto signUp(SignUpDto signUpDto){
         if (userRepository.findByEmail(signUpDto.getEmail()).isPresent()) {
             throw new CustomException(ErrorCode.USER_DUPLICATION_ERROR, "이미 사용 중인 이메일 입니다. ");
@@ -74,6 +76,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public SignInResponseDto signIn(SignInDto signInDto) {
 
         Optional<User> optionalUser = userRepository.findByUserId(signInDto.getUserId());
@@ -108,6 +111,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;

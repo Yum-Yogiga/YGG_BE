@@ -1,6 +1,7 @@
 package com.yogiga.yogiga.user.entity;
 
 import com.yogiga.yogiga.global.entity.BaseTimeEntity;
+import com.yogiga.yogiga.keyword.entity.UserKeyword;
 import com.yogiga.yogiga.user.dto.UserDto;
 import com.yogiga.yogiga.user.enums.Role;
 import com.yogiga.yogiga.user.enums.SocialType;
@@ -11,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -43,6 +45,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private SocialType socialType;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private List<UserKeyword> userKeywords = new ArrayList<>();
 
     public static User toEntity(UserDto userDto) {
         return User.builder()
