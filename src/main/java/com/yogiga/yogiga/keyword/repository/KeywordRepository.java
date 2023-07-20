@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface KeywordRepository extends JpaRepository<Keyword, Long> {
     List<Keyword> getKeywordsById(Long id);
+
+    List<Keyword> findAllByOrderByIdDesc();
 }

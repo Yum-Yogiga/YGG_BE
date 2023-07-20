@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .requestMatchers("/sign-up", "/sign-in", "email-verification").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/restaurants/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/keywords/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
