@@ -2,10 +2,7 @@ package com.yogiga.yogiga.keyword.entity;
 
 import com.yogiga.yogiga.restaurant.entity.Restaurant;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -24,5 +21,11 @@ public class RestaurantKeyword {
     private Keyword keyword;
 
     @Column(nullable = false)
-    private Long score;
+    private double score;
+
+    public void setRestaurantKeyword(Restaurant restaurant, Keyword keyword, double score) {
+        this.restaurant = restaurant;
+        this.keyword = keyword;
+        this.score = score;
+    }
 }

@@ -52,7 +52,7 @@ public class Restaurant extends BaseTimeEntity {
                 .build();
     }
 
-    public  void update(RestaurantDto restaurantDto) {
+    public void update(RestaurantDto restaurantDto) {
         this.name = restaurantDto.getName();
         this.address = restaurantDto.getAddress();
         this.tel = restaurantDto.getTel();
@@ -62,4 +62,8 @@ public class Restaurant extends BaseTimeEntity {
     public void setMenuList(List<Menu> menuList) {
         this.menuList = menuList;
     }
+
+    public void setRestaurantKeywords(List<RestaurantKeyword> restaurantKeywordList) {
+        this.restaurantKeywords = restaurantKeywordList;
+     }
 }

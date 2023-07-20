@@ -10,7 +10,7 @@ import lombok.*;
 public class MenuDto {
     private String name;
 
-    private double price;
+    private String price;
 
     public static MenuDto toDto(Menu menu) {
         return MenuDto.builder()
