@@ -2,6 +2,7 @@ package com.yogiga.yogiga.keyword.service;
 
 import com.yogiga.yogiga.global.exception.CustomException;
 import com.yogiga.yogiga.global.exception.ErrorCode;
+import com.yogiga.yogiga.keyword.dto.KeywordDto;
 import com.yogiga.yogiga.keyword.dto.UserKeywordDto;
 import com.yogiga.yogiga.keyword.entity.Keyword;
 import com.yogiga.yogiga.keyword.entity.UserKeyword;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +25,11 @@ public class KeywordServiceImpl implements KeywordService {
     private final UserKeywordRepository userKeywordRepository;
     private final UserRepository userRepository;
 
+
     @Override
-    public List<Keyword> getKeywordsByIds(List<Long> keywordIds) {
-        return keywordRepository.findAllById(keywordIds);
+    public List<KeywordDto> getAllKeywords() {
+        List<Keyword> keywords = keywordRepository.findAllByOrderByIdDesc();
+        return keywords.stream().map(KeywordDto::toDto).collect(Collectors.toList());
     }
 
     @Override

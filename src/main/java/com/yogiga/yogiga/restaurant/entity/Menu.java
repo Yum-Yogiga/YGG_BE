@@ -21,7 +21,7 @@ public class Menu {
     private String name;
 
     @Column(nullable = false)
-    private double price;
+    private String price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Restaurant restaurant;

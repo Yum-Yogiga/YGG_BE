@@ -1,12 +1,12 @@
 package com.yogiga.yogiga.keyword.service;
 
+import com.yogiga.yogiga.keyword.dto.KeywordDto;
 import com.yogiga.yogiga.keyword.dto.UserKeywordDto;
-import com.yogiga.yogiga.keyword.entity.Keyword;
 
 import java.util.List;
 
 public interface KeywordService {
-    List<Keyword> getKeywordsByIds(List<Long> keywordIds);
+    List<KeywordDto> getAllKeywords();
 
     Long saveUserKeywords(String userId, UserKeywordDto userKeywordDto);
 }
