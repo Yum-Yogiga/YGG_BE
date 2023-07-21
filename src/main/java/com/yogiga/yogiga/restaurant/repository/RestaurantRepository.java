@@ -7,4 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     Page<Restaurant> findAllByOrderByIdDesc(Pageable pageable);
+
+    Restaurant findByAddress(String address);
+
 }

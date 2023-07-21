@@ -28,5 +28,8 @@ public class Keyword {
     @OneToMany(mappedBy = "keyword", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<UserKeyword> userKeywords = new ArrayList<>();
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
 }

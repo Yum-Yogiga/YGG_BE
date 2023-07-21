@@ -36,7 +36,7 @@ public class Restaurant extends BaseTimeEntity {
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menuList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
     private List<RestaurantKeyword> restaurantKeywords = new ArrayList<>();
 
     @Builder

@@ -1,4 +1,4 @@
-package com.yogiga.yogiga.restaurant.csv;
+package com.yogiga.yogiga.restaurant.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,33 +36,23 @@ public class ResCsvDto {
 
     // Getter and Setter for menu and price based on index (1, 2, or 3)
     public String getMenuName(int index) {
-        switch (index) {
-            case 1:
-                return menu1;
-            case 2:
-                return menu2;
-            case 3:
-                return menu3;
-            case 4:
-                return menu4;
-            default:
-                return null;
-        }
+        return switch (index) {
+            case 1 -> menu1;
+            case 2 -> menu2;
+            case 3 -> menu3;
+            case 4 -> menu4;
+            default -> null;
+        };
     }
 
     public String getMenuPrice(int index) {
-        switch (index) {
-            case 1:
-                return price1;
-            case 2:
-                return price2;
-            case 3:
-                return price3;
-            case 4:
-                return price4;
-            default:
-                return "0";
-        }
+        return switch (index) {
+            case 1 -> price1;
+            case 2 -> price2;
+            case 3 -> price3;
+            case 4 -> price4;
+            default -> "0";
+        };
     }
 
 }

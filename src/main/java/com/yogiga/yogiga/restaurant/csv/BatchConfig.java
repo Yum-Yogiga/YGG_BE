@@ -1,5 +1,6 @@
 package com.yogiga.yogiga.restaurant.csv;
 
+import com.yogiga.yogiga.restaurant.dto.ResCsvDto;
 import com.yogiga.yogiga.restaurant.entity.Restaurant;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.support.DefaultBatchConfiguration;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
@@ -19,7 +19,6 @@ import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
@@ -27,7 +26,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-@ConditionalOnMissingBean(value = DefaultBatchConfiguration.class, annotation = EnableBatchProcessing.class)
 
 public class BatchConfig extends DefaultBatchConfiguration {
     private final ResItemProcessor resItemProcessor;
@@ -39,7 +37,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
     public FlatFileItemReader<ResCsvDto> restaurantItemReader() {
         return new FlatFileItemReaderBuilder<ResCsvDto>()
                 .name("restaurantItemReader")
-                .resource(new FileSystemResource("src/main/resources/retaurant.csv"))
+                .resource(new FileSystemResource("src/main/resources/restaurant.csv"))
                 .linesToSkip(1) // Skip header row
                 .delimited()
                 .names("name",
@@ -63,7 +61,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
     @Bean
     public Step restaurantStep(JobRepository jobRepository,FlatFileItemReader<ResCsvDto> reader, JpaItemWriter<Restaurant> writer, PlatformTransactionManager transactionManager) {
         return new StepBuilder("restaurantStep", jobRepository)
-                .<ResCsvDto, Restaurant> chunk(10, transactionManager)
+                .<ResCsvDto, Restaurant> chunk(100, transactionManager)
                 .reader(reader)
                 .processor(resItemProcessor)
                 .writer(writer)

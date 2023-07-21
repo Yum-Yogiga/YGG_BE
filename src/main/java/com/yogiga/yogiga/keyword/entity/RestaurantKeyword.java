@@ -28,4 +28,8 @@ public class RestaurantKeyword {
         this.keyword = keyword;
         this.score = score;
     }
+
+    public void updateScore(double score) {
+        this.score = score;
+    }
 }
