@@ -35,6 +35,7 @@ public class RestaurantController {
     public ResponseEntity<Page<RestaurantResponseDto>> getAllRes(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(restaurantService.getAllRes(pageable));
     }
+    @Operation(summary = "식당 크롤링 csv 파일 DB 저장")
     @PostMapping("/upload")
     public ResponseEntity<String> runJob() {
         try {

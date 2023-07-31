@@ -1,4 +1,4 @@
-package com.yogiga.yogiga.restaurant.csv;
+package com.yogiga.yogiga.restaurant.batch;
 
 import com.yogiga.yogiga.keyword.entity.Keyword;
 import com.yogiga.yogiga.keyword.entity.RestaurantKeyword;
