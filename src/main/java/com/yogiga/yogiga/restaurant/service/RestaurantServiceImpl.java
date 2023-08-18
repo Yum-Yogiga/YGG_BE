@@ -1,5 +1,6 @@
 package com.yogiga.yogiga.restaurant.service;
 
+import com.yogiga.yogiga.global.config.WebClientUtil;
 import com.yogiga.yogiga.global.exception.CustomException;
 import com.yogiga.yogiga.global.exception.ErrorCode;
 import com.yogiga.yogiga.restaurant.dto.MenuDto;
@@ -12,21 +13,31 @@ import com.yogiga.yogiga.restaurant.repository.RestaurantRepository;
 import com.yogiga.yogiga.user.entity.User;
 import com.yogiga.yogiga.user.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
-
     private final MenuRepository menuRepository;
+    @Value("${ai.api.url}")
+    private String aiApiUrl;
+
 
     @Override
     @Transactional(readOnly = true)
@@ -40,6 +51,19 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Page<RestaurantResponseDto> getAllRes(Pageable pageable) {
         Page<Restaurant> restaurantPage = restaurantRepository.findAllByOrderByIdDesc(pageable);
         return restaurantPage.map(RestaurantResponseDto::toDto);
+    }
+
+    @Override
+    public Mono<List<String>> recommendRestaurants(List<Integer> keywordInput) {
+
+        WebClient webClient = WebClientUtil.getBaseUrl(aiApiUrl);
+        log.info("recommendRestaurants : {}", aiApiUrl);
+        return webClient.post()
+                .uri("/model/k_means")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(Map.of("keyword", keywordInput))
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<String>>() {});
     }
 
     @Override
