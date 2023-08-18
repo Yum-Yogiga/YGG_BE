@@ -39,6 +39,7 @@ public class RestaurantController {
     public ResponseEntity<Page<RestaurantResponseDto>> getAllRes(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(restaurantService.getAllRes(pageable));
     }
+    @Operation(summary = "키워드 기반 식당 추천 api, 9개 키워드중 선택된 키워드 = 1, 선택안된 키워드 = 0 으로 넘겨주면 추천 식당이름 반환")
     @PostMapping("/recommend")
     public Mono<List<String>> recommendRestaurants(@RequestBody List<Integer> keywordInput) {
         Mono<List<String>> recommendRestaurants = restaurantService.recommendRestaurants(keywordInput);
