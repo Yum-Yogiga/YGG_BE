@@ -1,4 +1,4 @@
-package com.yogiga.yogiga.restaurant.csv;
+package com.yogiga.yogiga.restaurant.batch;
 
 import com.yogiga.yogiga.restaurant.dto.ResCsvDto;
 import com.yogiga.yogiga.restaurant.entity.Restaurant;
