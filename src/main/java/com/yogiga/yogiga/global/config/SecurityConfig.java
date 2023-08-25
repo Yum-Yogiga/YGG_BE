@@ -1,6 +1,7 @@
 package com.yogiga.yogiga.global.config;
 
 import com.yogiga.yogiga.global.jwt.JwtAuthenticationFilter;
+import com.yogiga.yogiga.global.jwt.JwtExceptionFilter;
 import com.yogiga.yogiga.user.config.OAuthSuccessHandler;
 import com.yogiga.yogiga.user.service.OAuthService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
     private final AuthenticationProvider authenticationProvider;
 
     private final OAuthSuccessHandler oAuthSuccessHandler;
@@ -49,6 +51,7 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
                 .oauth2Login()
                 .successHandler(oAuthSuccessHandler)
                 .userInfoEndpoint()
