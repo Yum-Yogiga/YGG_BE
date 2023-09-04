@@ -1,10 +1,9 @@
 package com.yogiga.yogiga.global.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@Slf4j
 public class JwtService {
 
     @Value("${security.jwt.secret}")
@@ -48,12 +48,30 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            log.info("Extracting all claims from token: {}", token);
+            return Jwts
+                    .parserBuilder()
+                    .setSigningKey(getSignInKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (SecurityException e) {
+            log.info("Invalid JWT signature.");
+            throw new JwtException("잘못된 JWT 시그니처");
+        } catch (MalformedJwtException e) {
+            log.info("Invalid JWT token.");
+            throw new JwtException("유효하지 않은 JWT 토큰");
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT token.");
+            throw new JwtException("토큰 기한 만료");
+        } catch (UnsupportedJwtException e) {
+            log.info("Unsupported JWT token.");
+        } catch (IllegalArgumentException e) {
+            log.info("JWT token compact of handler are invalid.");
+            throw new JwtException("JWT token compact of handler are invalid.");
+        }
+        return null;
     }
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
