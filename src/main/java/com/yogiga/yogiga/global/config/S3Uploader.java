@@ -1,6 +1,6 @@
 package com.yogiga.yogiga.global.config;
 
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -20,18 +20,19 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Component
 public class S3Uploader {
-    private final AmazonS3Client client;
+    private final AmazonS3 client;
 
     @Value("${cloud.aws.s3.bucketName}")
     private String bucket;
 
     //파일명 중복방지
-    public String createUniqueFileName(String originName) {
+    private String createUniqueFileName(String originName) {
         String random = UUID.randomUUID().toString();
         return random + originName;
     }
 
-    public String uploadImage(MultipartFile multipartFile, String uniqueFileName) {
+    public String uploadImage(MultipartFile multipartFile) {
+        String uniqueFileName = createUniqueFileName(multipartFile.getOriginalFilename());
         // 메타데이터 설정
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());

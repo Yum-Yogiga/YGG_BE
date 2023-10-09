@@ -71,15 +71,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Long createRestaurant(RestaurantDto restaurantDto) {
         User user = SecurityUtil.getUser();
         Restaurant restaurant = Restaurant.toEntity(restaurantDto);
-        List<MenuDto> menuDtoList = restaurantDto.getMenuDtoList();
+        restaurantRepository.save(restaurant);
 
+        List<MenuDto> menuDtoList = restaurantDto.getMenuDtoList();
         List<Menu> menuList = menuDtoList.stream()
                 .map(menuDto -> {
                     Menu menu = Menu.toEntity(menuDto);
                     menu.setRestaurant(restaurant); // 식당과의 연관관계 설정
                     return menu;
                 }).toList();
-        restaurantRepository.save(restaurant);
         menuRepository.saveAll(menuList);
 
         return restaurant.getId();
