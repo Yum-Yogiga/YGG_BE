@@ -23,6 +23,8 @@ public class Menu {
     @Column(nullable = false)
     private String price;
 
+    private String imageUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Restaurant restaurant;
 
@@ -36,4 +38,6 @@ public class Menu {
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
     }
+
+    public void setImageUrl(String imageUrl) {this.imageUrl = imageUrl;}
 }
