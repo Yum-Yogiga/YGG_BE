@@ -109,6 +109,8 @@ public class ResItemProcessor implements ItemProcessor<ResCsvDto, Restaurant> {
                 .name(resCsvDto.getName())
                 .address(resCsvDto.getAddress())
                 .tel(resCsvDto.getTel())
+                .likeCount(0)
+                .dislikeCount(0)
                 .build();
         restaurantRepository.save(restaurant);
 
