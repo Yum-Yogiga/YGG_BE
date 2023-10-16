@@ -11,11 +11,15 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class KeywordDto {
+    @Schema(description = "키워드 ID")
+    private Long id;
+
     @Schema(description = "키워드 이름")
     private String name;
 
     public static KeywordDto toDto(Keyword keyword){
         return KeywordDto.builder()
+                .id(keyword.getId())
                 .name(keyword.getName())
                 .build();
     }
