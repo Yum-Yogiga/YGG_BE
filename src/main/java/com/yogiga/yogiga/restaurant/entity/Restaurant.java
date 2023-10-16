@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -46,9 +45,6 @@ public class Restaurant extends BaseTimeEntity {
                 .address(restaurantDto.getAddress())
                 .tel(restaurantDto.getTel())
                 .openingHours(restaurantDto.getOpeningHours())
-                .menuList(restaurantDto.getMenuDtoList().stream()
-                        .map(Menu::toEntity)
-                        .collect(Collectors.toList()))
                 .build();
     }
 

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -71,7 +72,7 @@ public class RestaurantController {
     }
 
     @Operation(summary = "식당 등록")
-    @PostMapping
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Long> createRestaurant(@Valid @RequestBody RestaurantDto restaurantDto) {
         return ResponseEntity.ok(restaurantService.createRestaurant(restaurantDto));
     }

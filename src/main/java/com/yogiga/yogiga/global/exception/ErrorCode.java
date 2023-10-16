@@ -14,8 +14,8 @@ public enum ErrorCode {
 
     RESTAURANT_NOT_FOUND_ERROR(400, "RESTAURANT-NOT-FOUND-ERROR", "RESTAURANT NOT FOUND ERROR"),
 
-    EMPTY_KEYWORD_LIST(400, "EMPTY-KEYWORD-LIST", "EMPTY KEYWORD LIST");
-
+    EMPTY_KEYWORD_LIST(400, "EMPTY-KEYWORD-LIST", "EMPTY KEYWORD LIST"),
+    FILE_UPLOAD_ERROR(500, "FILE-UPLOAD-ERROR", "FILE UPLOAD ERROR");
     private final int httpStatus;
     private final String code;
     private final String message;
