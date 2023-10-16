@@ -105,7 +105,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         Restaurant restaurant = findRestaurant(restaurantId);
 
          if(restaurantLikesRepository.existsByUserAndRestaurant(user, restaurant)) {
-             throw new CustomException(ErrorCode.RESTAURANT_LIKE_ALREADY_EXIST, "이미 해당 식당을 추천했습니다. ");
+             throw new CustomException(ErrorCode.RESTAURANT_LIKE_ALREADY_EXIST, "이미 해당 식당을 좋아요 또는 싫어요를 했습니다. ");
          }
 
         RestaurantLikes restaurantLikes = RestaurantLikes.toEntity(user, restaurant);
@@ -117,8 +117,21 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @Transactional
     public Integer dislikeRestaurants(Long restaurantId) {
-        return null;
+        User user = SecurityUtil.getUser();
+        Restaurant restaurant = findRestaurant(restaurantId);
+
+        if(restaurantLikesRepository.existsByUserAndRestaurant(user, restaurant)) {
+            throw new CustomException(ErrorCode.RESTAURANT_NOT_FOUND_ERROR, "이미 해당 식당을 좋아요 또는 싫어요를 했습니다. ");
+        }
+
+        RestaurantLikes restaurantLikes = RestaurantLikes.toEntity(user, restaurant);
+        restaurantLikesRepository.save(restaurantLikes);
+
+        restaurant.plusDislikeCount();
+
+        return restaurant.getDislikeCount();
     }
 
     @Override

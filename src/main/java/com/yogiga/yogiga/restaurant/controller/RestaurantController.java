@@ -88,9 +88,15 @@ public class RestaurantController {
         restaurantService.deleteRestaurant(id);
     }
 
-    @Operation(summary = "식당 추천", description = "식당 id값 넘겨주면 좋아요 갯수 1 증가, 좋아요는 각 식당에 한번씩 만 가능하다.")
+    @Operation(summary = "식당 좋아요", description = "식당 id값 넘겨주면 좋아요 갯수 1 증가, 좋아요는 각 식당에 한번씩만 가능하다.")
     @PostMapping("/likes/{id}")
     public ResponseEntity<Integer> likeRestaurants(@PathVariable Long id) {
         return ResponseEntity.ok(restaurantService.likeRestaurants(id));
+    }
+
+    @Operation(summary = "식당 싫어요", description = "식당 id값 넘겨주면 싫어요 갯수 1 증가, 싫어요는 각 식당에 한번씩만 가능하다.")
+    @PostMapping("/dislikes/{id}")
+    public ResponseEntity<Integer> dislikeRestaurants(@PathVariable Long id) {
+        return ResponseEntity.ok(restaurantService.dislikeRestaurants(id));
     }
 }
