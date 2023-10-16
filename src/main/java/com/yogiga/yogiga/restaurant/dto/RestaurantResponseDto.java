@@ -26,6 +26,10 @@ public class RestaurantResponseDto {
 
     private String openingHours;
 
+    private Integer likeCount;
+
+    private Integer dislikeCount;
+
     private List<MenuDto> menuList;
 
     @Builder
@@ -35,6 +39,8 @@ public class RestaurantResponseDto {
                 .address(restaurant.getAddress())
                 .tel(restaurant.getTel())
                 .openingHours(restaurant.getOpeningHours())
+                .likeCount(restaurant.getLikeCount())
+                .dislikeCount(restaurant.getDislikeCount())
                 .menuList(restaurant.getMenuList().stream()
                         .map(MenuDto::toDto)
                         .collect(Collectors.toList()))
