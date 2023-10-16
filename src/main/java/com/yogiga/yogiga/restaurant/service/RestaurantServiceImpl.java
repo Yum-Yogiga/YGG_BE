@@ -1,5 +1,6 @@
 package com.yogiga.yogiga.restaurant.service;
 
+import com.yogiga.yogiga.global.config.S3Uploader;
 import com.yogiga.yogiga.global.config.WebClientUtil;
 import com.yogiga.yogiga.global.exception.CustomException;
 import com.yogiga.yogiga.global.exception.ErrorCode;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,6 +42,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final MenuRepository menuRepository;
     @Value("${ai.api.url}")
     private String aiApiUrl;
+
+    private final S3Uploader s3Uploader;
 
 
     @Override
@@ -74,15 +78,23 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Long createRestaurant(RestaurantDto restaurantDto) {
         User user = SecurityUtil.getUser();
         Restaurant restaurant = Restaurant.toEntity(restaurantDto);
-        List<MenuDto> menuDtoList = restaurantDto.getMenuDtoList();
-
-        List<Menu> menuList = menuDtoList.stream()
-                .map(menuDto -> {
-                    Menu menu = Menu.toEntity(menuDto);
-                    menu.setRestaurant(restaurant); // 식당과의 연관관계 설정
-                    return menu;
-                }).toList();
         restaurantRepository.save(restaurant);
+
+        List<MenuDto> menuDtoList = restaurantDto.getMenuDtoList();
+        List<Menu> menuList = new ArrayList<>();
+
+        for (MenuDto menuDto : menuDtoList) {
+            Menu menu = Menu.toEntity(menuDto);
+            menu.setRestaurant(restaurant);
+
+            // 이미지 업로드 및 URL 설정
+            if (menuDto.getImage() != null) {
+                String imageUrl = s3Uploader.uploadImage(menuDto.getImage()); // 이미지를 S3에 업로드하고 URL을 반환하는 메서드
+                menu.setImageUrl(imageUrl);
+            }
+            menuList.add(menu);
+        }
+
         menuRepository.saveAll(menuList);
 
         return restaurant.getId();
