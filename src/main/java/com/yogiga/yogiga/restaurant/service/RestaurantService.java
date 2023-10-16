@@ -19,5 +19,8 @@ public interface RestaurantService {
 
     Long updateRestaurant(Long id, RestaurantDto restaurantDto);
 
+    Integer likeRestaurants(Long restaurantId);
+    Integer dislikeRestaurants(Long restaurantId);
+
     void deleteRestaurant(Long id);
 }

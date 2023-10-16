@@ -8,7 +8,9 @@ import com.yogiga.yogiga.restaurant.dto.RestaurantDto;
 import com.yogiga.yogiga.restaurant.dto.RestaurantResponseDto;
 import com.yogiga.yogiga.restaurant.entity.Menu;
 import com.yogiga.yogiga.restaurant.entity.Restaurant;
+import com.yogiga.yogiga.restaurant.entity.RestaurantLikes;
 import com.yogiga.yogiga.restaurant.repository.MenuRepository;
+import com.yogiga.yogiga.restaurant.repository.RestaurantLikesRepository;
 import com.yogiga.yogiga.restaurant.repository.RestaurantRepository;
 import com.yogiga.yogiga.user.entity.User;
 import com.yogiga.yogiga.user.util.SecurityUtil;
@@ -34,6 +36,7 @@ import java.util.Optional;
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+    private final RestaurantLikesRepository restaurantLikesRepository;
     private final MenuRepository menuRepository;
     @Value("${ai.api.url}")
     private String aiApiUrl;
@@ -97,10 +100,34 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     @Transactional
+    public Integer likeRestaurants(Long restaurantId) {
+        User user = SecurityUtil.getUser();
+        Restaurant restaurant = findRestaurant(restaurantId);
+
+         if(restaurantLikesRepository.existsByUserAndRestaurant(user, restaurant)) {
+             throw new CustomException(ErrorCode.RESTAURANT_LIKE_ALREADY_EXIST, "이미 해당 식당을 추천했습니다. ");
+         }
+
+        RestaurantLikes restaurantLikes = RestaurantLikes.toEntity(user, restaurant);
+        restaurantLikesRepository.save(restaurantLikes);
+
+        restaurant.plusLikeCount();
+
+        return restaurant.getLikeCount();
+    }
+
+    @Override
+    public Integer dislikeRestaurants(Long restaurantId) {
+        return null;
+    }
+
+    @Override
+    @Transactional
     public void deleteRestaurant(Long restaurantId) {
         Restaurant restaurant = findRestaurant(restaurantId);
         restaurantRepository.delete(restaurant);
     }
+
 
     @Transactional(readOnly = true)
     protected Restaurant findRestaurant(Long restaurantId) {
