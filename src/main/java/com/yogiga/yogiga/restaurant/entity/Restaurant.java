@@ -33,6 +33,9 @@ public class Restaurant extends BaseTimeEntity {
 
     private String openingHours;
 
+    private Integer likeCount;
+    private Integer dislikeCount;
+
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menuList = new ArrayList<>();
 
@@ -57,6 +60,14 @@ public class Restaurant extends BaseTimeEntity {
         this.address = restaurantDto.getAddress();
         this.tel = restaurantDto.getTel();
         this.openingHours = restaurantDto.getOpeningHours();
+    }
+
+    public void plusLikeCount() {
+        this.likeCount++;
+    }
+
+    public void plusDislikeCount() {
+        this.dislikeCount++;
     }
 
     public void setMenuList(List<Menu> menuList) {
