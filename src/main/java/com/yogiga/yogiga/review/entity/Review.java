@@ -2,6 +2,7 @@ package com.yogiga.yogiga.review.entity;
 
 import com.yogiga.yogiga.global.entity.BaseTimeEntity;
 import com.yogiga.yogiga.restaurant.entity.Restaurant;
+import com.yogiga.yogiga.review.dto.ReviewDto;
 import com.yogiga.yogiga.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,5 +28,12 @@ public class Review extends BaseTimeEntity {
 
     @Column(nullable = false)
     String content;
+
+    @Builder
+    public static Review toEntity(ReviewDto reviewDto) {
+        return Review.builder()
+                .content(reviewDto.getContent())
+                .build();
+    }
 
 }
