@@ -53,7 +53,7 @@ public class ReviewServiceImpl implements ReviewService{
     public Long updateReview(Long reviewId, ReviewDto reviewDto) {
         User user = SecurityUtil.getUser();
         Review review = findReview(reviewId);
-        if (user.getUserId().equals(review.getUser().getUserId())) {
+        if (!user.getUserId().equals(review.getUser().getUserId())) {
             throw new CustomException(ErrorCode.AUTHENTICATION_ERROR, "리뷰를 작성한 유저와 일치하지 않습니다. ");
         }
         review.update(reviewDto);
@@ -64,7 +64,7 @@ public class ReviewServiceImpl implements ReviewService{
     public void deleteReview(Long reviewId) {
         User user = SecurityUtil.getUser();
         Review review = findReview(reviewId);
-        if (user.getUserId().equals(review.getUser().getUserId())) {
+        if (!user.getUserId().equals(review.getUser().getUserId())) {
             throw new CustomException(ErrorCode.AUTHENTICATION_ERROR, "리뷰를 작성한 유저와 일치하지 않습니다. ");
         }
         reviewRepository.delete(review);

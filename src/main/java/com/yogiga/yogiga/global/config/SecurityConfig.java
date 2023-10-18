@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/restaurants/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/keywords/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
