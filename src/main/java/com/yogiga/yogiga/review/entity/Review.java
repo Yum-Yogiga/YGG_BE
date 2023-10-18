@@ -30,10 +30,15 @@ public class Review extends BaseTimeEntity {
     String content;
 
     @Builder
-    public static Review toEntity(ReviewDto reviewDto) {
+    public static Review toEntity(User user, Restaurant restaurant, ReviewDto reviewDto) {
         return Review.builder()
+                .user(user)
+                .restaurant(restaurant)
                 .content(reviewDto.getContent())
                 .build();
+    }
+    public void update(ReviewDto reviewDto) {
+        this.content = reviewDto.getContent();
     }
 
 }
