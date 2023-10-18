@@ -26,8 +26,6 @@ import java.util.List;
 @RequestMapping("/restaurants")
 public class RestaurantController {
     private final RestaurantService restaurantService;
-    private final JobLauncher jobLauncher;
-    private final Job importRestaurantJob;
 
     @Operation(summary = "id로 특정 식당 조회")
     @GetMapping("/{id}")
@@ -50,25 +48,6 @@ public class RestaurantController {
             // 이 부분에서 result 값을 확인하고 원하는 처리를 수행할 수 있습니다.
         });
         return recommendRestaurants;
-    }
-
-    @Operation(summary = "식당 크롤링 csv 파일 DB 저장")
-    @PostMapping("/upload")
-    public ResponseEntity<String> runJob() {
-        try {
-            JobParameters jobParameters = new JobParametersBuilder()
-                    .addLong("time", System.currentTimeMillis())
-                    .toJobParameters();
-
-            JobExecution jobExecution = jobLauncher.run(importRestaurantJob, jobParameters);
-
-            ExitStatus exitStatus = jobExecution.getExitStatus();
-            String result = "Job Execution Status: " + exitStatus.getExitCode() + " - " + exitStatus.getExitDescription();
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("Job Execution Failed", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     @Operation(summary = "식당 등록")
