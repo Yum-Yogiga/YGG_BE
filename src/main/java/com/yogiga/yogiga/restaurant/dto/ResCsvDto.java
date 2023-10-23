@@ -27,12 +27,16 @@ public class ResCsvDto {
     private String tel;
     private String menu1;
     private String price1;
+    private String image1;
     private String menu2;
     private String price2;
+    private String image2;
     private String menu3;
     private String price3;
+    private String image3;
     private String menu4;
     private String price4;
+    private String image4;
 
     // Getter and Setter for menu and price based on index (1, 2, or 3)
     public String getMenuName(int index) {
@@ -51,6 +55,16 @@ public class ResCsvDto {
             case 2 -> price2;
             case 3 -> price3;
             case 4 -> price4;
+            default -> "0";
+        };
+    }
+
+    public String getMenuImage(int index) {
+        return switch (index) {
+            case 1 -> image1;
+            case 2 -> image2;
+            case 3 -> image3;
+            case 4 -> image4;
             default -> "0";
         };
     }
