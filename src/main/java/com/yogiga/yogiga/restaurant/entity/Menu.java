@@ -23,6 +23,7 @@ public class Menu {
     @Column(nullable = false)
     private String price;
 
+    @Column(length = 1000)
     private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)

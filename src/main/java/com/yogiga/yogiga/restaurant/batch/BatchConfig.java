@@ -43,7 +43,10 @@ public class BatchConfig extends DefaultBatchConfiguration {
                 .names("name",
                         "tasty", "friendly", "specialMenu", "clean", "freshIngredients", "costEffective", "generousPortions", "greatInterior", "goodForSolo",
                         "link", "address", "tel",
-                        "menu1", "price1", "menu2", "price2", "menu3", "price3", "menu4", "price4")
+                        "menu1", "price1", "image1",
+                        "menu2", "price2", "image2",
+                        "menu3", "price3", "image3",
+                        "menu4", "price4", "image4")
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<ResCsvDto>() {{
                     setTargetType(ResCsvDto.class);
                 }})

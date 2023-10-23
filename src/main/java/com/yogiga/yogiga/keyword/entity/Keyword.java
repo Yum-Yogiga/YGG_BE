@@ -6,9 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @Builder
@@ -21,12 +18,6 @@ public class Keyword {
 
     @Column(nullable = false)
     private String name;
-
-    @OneToMany(mappedBy = "keyword", cascade = CascadeType.MERGE, orphanRemoval = true)
-    private List<RestaurantKeyword> restaurantKeywords = new ArrayList<>();
-
-    @OneToMany(mappedBy = "keyword", cascade = CascadeType.MERGE, orphanRemoval = true)
-    private List<UserKeyword> userKeywords = new ArrayList<>();
 
     public void setName(String name) {
         this.name = name;

@@ -4,7 +4,6 @@ import com.yogiga.yogiga.keyword.entity.Keyword;
 import com.yogiga.yogiga.keyword.entity.RestaurantKeyword;
 import com.yogiga.yogiga.keyword.repository.KeywordRepository;
 import com.yogiga.yogiga.keyword.repository.RestaurantKeywordRepository;
-import com.yogiga.yogiga.restaurant.dto.MenuDto;
 import com.yogiga.yogiga.restaurant.dto.ResCsvDto;
 import com.yogiga.yogiga.restaurant.dto.RestaurantDto;
 import com.yogiga.yogiga.restaurant.entity.Menu;
@@ -50,24 +49,28 @@ public class ResItemProcessor implements ItemProcessor<ResCsvDto, Restaurant> {
 
     @Transactional
     protected void updateMenu(Restaurant restaurant, ResCsvDto resCsvDto) {
-        List<MenuDto> menuList = new ArrayList<>();
+        List<Menu> menuList = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
             String menuName = resCsvDto.getMenuName(i);
             String menuPrice = resCsvDto.getMenuPrice(i);
+            String menuImage = resCsvDto.getMenuImage(i);
+
             if (menuName != null && !menuName.isEmpty() && !menuPrice.isEmpty()) {
-                MenuDto menu = MenuDto.toDto(Menu.builder()
+                Menu menu = Menu.builder()
                         .name(menuName)
                         .price(menuPrice)
                         .restaurant(restaurant)
-                        .build());
+                        .imageUrl(menuImage)
+                        .build();
                 menuList.add(menu);
             }
+
         }
-        restaurant.update(new RestaurantDto(resCsvDto.getName(), resCsvDto.getAddress(), resCsvDto.getTel(), "0", menuList));
+        restaurant.update(new RestaurantDto(resCsvDto.getName(), resCsvDto.getAddress(), resCsvDto.getTel(), "0", null));
+        restaurant.setMenuList(menuList);
     }
     @Transactional
     protected void updateKeywords(Restaurant restaurant, ResCsvDto resCsvDto) {
-        List<RestaurantKeyword> existingKeywords = restaurant.getRestaurantKeywords();
         Map<String, Double> keywordScores = new HashMap<>();
         keywordScores.put("음식이 맛있어요", resCsvDto.getTasty());
         keywordScores.put("친절해요", resCsvDto.getFriendly());
@@ -107,6 +110,7 @@ public class ResItemProcessor implements ItemProcessor<ResCsvDto, Restaurant> {
     protected Restaurant createRestaurant(ResCsvDto resCsvDto) {
         Restaurant restaurant = Restaurant.builder()
                 .name(resCsvDto.getName())
+                .link("https://map.naver.com/p/entry/place/" + resCsvDto.getLink())
                 .address(resCsvDto.getAddress())
                 .tel(resCsvDto.getTel())
                 .likeCount(0)
@@ -119,11 +123,14 @@ public class ResItemProcessor implements ItemProcessor<ResCsvDto, Restaurant> {
         for (int i = 1; i <= 4; i++) {
             String menuName = resCsvDto.getMenuName(i);
             String menuPrice = resCsvDto.getMenuPrice(i);
+            String menuImage = resCsvDto.getMenuImage(i);
+
             if (menuName != null && !menuName.isEmpty() && !menuPrice.isEmpty()) {
                 Menu menu = Menu.builder()
                         .name(menuName)
                         .price(menuPrice)
                         .restaurant(restaurant)
+                        .imageUrl(menuImage)
                         .build();
                 menuList.add(menu);
             }

@@ -19,6 +19,8 @@ public class RestaurantResponseDto {
     @NotBlank
     private String name;
 
+    private String link;
+
     @NotBlank
     private String address;
 
@@ -30,19 +32,20 @@ public class RestaurantResponseDto {
 
     private Integer dislikeCount;
 
-    private List<MenuDto> menuList;
+    private List<MenuResponseDto> menuList;
 
     @Builder
     public static RestaurantResponseDto toDto(Restaurant restaurant) {
         return RestaurantResponseDto.builder()
                 .name(restaurant.getName())
+                .link(restaurant.getLink())
                 .address(restaurant.getAddress())
                 .tel(restaurant.getTel())
                 .openingHours(restaurant.getOpeningHours())
                 .likeCount(restaurant.getLikeCount())
                 .dislikeCount(restaurant.getDislikeCount())
                 .menuList(restaurant.getMenuList().stream()
-                        .map(MenuDto::toDto)
+                        .map(MenuResponseDto::toDto)
                         .collect(Collectors.toList()))
                 .build();
     }
