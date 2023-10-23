@@ -30,7 +30,7 @@ public class RestaurantResponseDto {
 
     private Integer dislikeCount;
 
-    private List<MenuDto> menuList;
+    private List<MenuResponseDto> menuList;
 
     @Builder
     public static RestaurantResponseDto toDto(Restaurant restaurant) {
@@ -42,7 +42,7 @@ public class RestaurantResponseDto {
                 .likeCount(restaurant.getLikeCount())
                 .dislikeCount(restaurant.getDislikeCount())
                 .menuList(restaurant.getMenuList().stream()
-                        .map(MenuDto::toDto)
+                        .map(MenuResponseDto::toDto)
                         .collect(Collectors.toList()))
                 .build();
     }
