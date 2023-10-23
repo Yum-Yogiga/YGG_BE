@@ -71,7 +71,6 @@ public class ResItemProcessor implements ItemProcessor<ResCsvDto, Restaurant> {
     }
     @Transactional
     protected void updateKeywords(Restaurant restaurant, ResCsvDto resCsvDto) {
-        List<RestaurantKeyword> existingKeywords = restaurant.getRestaurantKeywords();
         Map<String, Double> keywordScores = new HashMap<>();
         keywordScores.put("음식이 맛있어요", resCsvDto.getTasty());
         keywordScores.put("친절해요", resCsvDto.getFriendly());

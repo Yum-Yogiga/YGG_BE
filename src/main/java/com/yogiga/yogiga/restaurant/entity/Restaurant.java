@@ -1,7 +1,6 @@
 package com.yogiga.yogiga.restaurant.entity;
 
 import com.yogiga.yogiga.global.entity.BaseTimeEntity;
-import com.yogiga.yogiga.keyword.entity.RestaurantKeyword;
 import com.yogiga.yogiga.restaurant.dto.RestaurantDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -45,9 +44,6 @@ public class Restaurant extends BaseTimeEntity {
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menuList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
-    private List<RestaurantKeyword> restaurantKeywords = new ArrayList<>();
-
     @Builder
     public static Restaurant toEntity(RestaurantDto restaurantDto) {
         return Restaurant.builder()
@@ -82,7 +78,4 @@ public class Restaurant extends BaseTimeEntity {
         this.menuList = menuList;
     }
 
-    public void setRestaurantKeywords(List<RestaurantKeyword> restaurantKeywordList) {
-        this.restaurantKeywords = restaurantKeywordList;
-     }
 }
