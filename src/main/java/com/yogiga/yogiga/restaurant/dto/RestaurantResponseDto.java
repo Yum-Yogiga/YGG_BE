@@ -19,6 +19,8 @@ public class RestaurantResponseDto {
     @NotBlank
     private String name;
 
+    private String link;
+
     @NotBlank
     private String address;
 
@@ -36,6 +38,7 @@ public class RestaurantResponseDto {
     public static RestaurantResponseDto toDto(Restaurant restaurant) {
         return RestaurantResponseDto.builder()
                 .name(restaurant.getName())
+                .link(restaurant.getLink())
                 .address(restaurant.getAddress())
                 .tel(restaurant.getTel())
                 .openingHours(restaurant.getOpeningHours())

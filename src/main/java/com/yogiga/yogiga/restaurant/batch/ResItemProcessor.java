@@ -111,6 +111,7 @@ public class ResItemProcessor implements ItemProcessor<ResCsvDto, Restaurant> {
     protected Restaurant createRestaurant(ResCsvDto resCsvDto) {
         Restaurant restaurant = Restaurant.builder()
                 .name(resCsvDto.getName())
+                .link("https://map.naver.com/p/entry/place/" + resCsvDto.getLink())
                 .address(resCsvDto.getAddress())
                 .tel(resCsvDto.getTel())
                 .likeCount(0)
