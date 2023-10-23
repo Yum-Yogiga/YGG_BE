@@ -41,7 +41,7 @@ public class Restaurant extends BaseTimeEntity {
     @Column(nullable = false)
     private Integer dislikeCount;
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Menu> menuList = new ArrayList<>();
 
     @Builder
