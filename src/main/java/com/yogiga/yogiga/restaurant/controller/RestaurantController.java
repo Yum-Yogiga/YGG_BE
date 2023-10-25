@@ -7,13 +7,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.*;
-import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +36,7 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.getAllRes(pageable));
     }
     @Operation(summary = "키워드 기반 식당 추천 api, 9개 키워드중 선택된 키워드 = 1, 선택안된 키워드 = 0 으로 넘겨주면 추천 식당이름 반환")
-    @PostMapping("/recommend")
+    @GetMapping("/recommend")
     public Mono<List<String>> recommendRestaurants(@RequestBody List<Integer> keywordInput) {
         Mono<List<String>> recommendRestaurants = restaurantService.recommendRestaurants(keywordInput);
 
