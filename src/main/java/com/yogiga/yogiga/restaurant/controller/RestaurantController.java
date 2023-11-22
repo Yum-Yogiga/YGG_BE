@@ -30,6 +30,12 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.getResById(id));
     }
 
+    @Operation(summary = "식당 이름으로 식당 조회")
+    @GetMapping("/name/{restaurantName}")
+    public ResponseEntity<RestaurantResponseDto> getResByName(@PathVariable String restaurantName) {
+        return ResponseEntity.ok(restaurantService.getResByName(restaurantName));
+    }
+
     @Operation(summary = "모든 식당 page 단위로 조회")
     @GetMapping("/all")
     public ResponseEntity<Page<RestaurantResponseDto>> getAllRes(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
