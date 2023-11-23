@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
@@ -32,11 +33,7 @@ public class RestaurantResponseDto {
 
     private Integer dislikeCount;
 
-    private Integer firstKeywordCount;
-
-    private Integer secondKeywordCount;
-
-    private Integer lastKeywordCount;
+    private Map<String, Integer> keywordCount;
 
     private List<MenuResponseDto> menuList;
 
@@ -56,9 +53,7 @@ public class RestaurantResponseDto {
                 .build();
     }
 
-    public void setTopKeywordCount(List<Integer> scoreCounts) {
-        this.firstKeywordCount = scoreCounts.get(0);
-        this.secondKeywordCount = scoreCounts.get(1);
-        this.lastKeywordCount = scoreCounts.get(2);
+    public void setTopKeywordCount(Map<String, Integer> topKeywords) {
+        this.keywordCount = topKeywords;
     }
 }

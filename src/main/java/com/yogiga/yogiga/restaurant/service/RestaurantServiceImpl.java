@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +56,18 @@ public class RestaurantServiceImpl implements RestaurantService {
         Restaurant restaurant = findRestaurant(restaurantId);
         List<RestaurantKeyword> restaurantKeywords = restaurantKeywordRepository.findByRestaurant(restaurant);
 
-        List<Integer> collect = restaurantKeywords.stream()
-                .map(RestaurantKeyword::getScoreCount)
-                .collect(Collectors.toList());
+
+        Map<String, Integer> topKeywords = restaurantKeywords
+                .stream()
+                .sorted((k1, k2) -> Integer.compare(k2.getScoreCount(), k1.getScoreCount()))
+                .limit(3)
+                .collect(Collectors.toMap(
+                        keyword -> keyword.getKeyword().getName(),
+                        RestaurantKeyword::getScoreCount
+                ));
 
         RestaurantResponseDto restaurantResponseDto = RestaurantResponseDto.toDto(restaurant);
-        restaurantResponseDto.setTopKeywordCount(collect);
+        restaurantResponseDto.setTopKeywordCount(topKeywords);
 
         return restaurantResponseDto;
     }
