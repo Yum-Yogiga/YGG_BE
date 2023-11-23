@@ -12,6 +12,8 @@ public interface RestaurantService {
 
     RestaurantResponseDto getResById(Long id);
 
+    RestaurantResponseDto getResByName(String name);
+
     Page<RestaurantResponseDto> getAllRes(Pageable pageable);
     Mono<List<String>> recommendRestaurants(List<Integer> keywordInput);
 

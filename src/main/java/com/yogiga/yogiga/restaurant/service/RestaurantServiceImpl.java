@@ -31,6 +31,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -64,6 +67,13 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public RestaurantResponseDto getResByName(String restaurantName) {
+        Restaurant restaurant = restaurantRepository.findByName(restaurantName);
+        return RestaurantResponseDto.toDto(restaurant);
+    }
+
+
+    @Override
     @Transactional(readOnly = true)
     public Page<RestaurantResponseDto> getAllRes(Pageable pageable) {
         Page<Restaurant> restaurantPage = restaurantRepository.findAllByOrderByIdDesc(pageable);
@@ -80,7 +90,8 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(Map.of("keyword", keywordInput))
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<String>>() {});
+                .bodyToMono(new ParameterizedTypeReference<List<String>>() {
+                });
     }
 
     @Override
@@ -126,9 +137,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         User user = SecurityUtil.getUser();
         Restaurant restaurant = findRestaurant(restaurantId);
 
-         if(restaurantLikesRepository.existsByUserAndRestaurant(user, restaurant)) {
-             throw new CustomException(ErrorCode.RESTAURANT_LIKE_ALREADY_EXIST, "이미 해당 식당을 좋아요 또는 싫어요를 했습니다. ");
-         }
+        if (restaurantLikesRepository.existsByUserAndRestaurant(user, restaurant)) {
+            throw new CustomException(ErrorCode.RESTAURANT_LIKE_ALREADY_EXIST, "이미 해당 식당을 좋아요 또는 싫어요를 했습니다. ");
+        }
 
         RestaurantLikes restaurantLikes = RestaurantLikes.toEntity(user, restaurant);
         restaurantLikesRepository.save(restaurantLikes);
@@ -144,7 +155,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         User user = SecurityUtil.getUser();
         Restaurant restaurant = findRestaurant(restaurantId);
 
-        if(restaurantLikesRepository.existsByUserAndRestaurant(user, restaurant)) {
+        if (restaurantLikesRepository.existsByUserAndRestaurant(user, restaurant)) {
             throw new CustomException(ErrorCode.RESTAURANT_NOT_FOUND_ERROR, "이미 해당 식당을 좋아요 또는 싫어요를 했습니다. ");
         }
 
