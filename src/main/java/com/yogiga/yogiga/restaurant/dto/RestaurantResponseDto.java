@@ -32,6 +32,12 @@ public class RestaurantResponseDto {
 
     private Integer dislikeCount;
 
+    private Integer firstKeywordCount;
+
+    private Integer secondKeywordCount;
+
+    private Integer lastKeywordCount;
+
     private List<MenuResponseDto> menuList;
 
     @Builder
@@ -48,5 +54,11 @@ public class RestaurantResponseDto {
                         .map(MenuResponseDto::toDto)
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    public void setTopKeywordCount(List<Integer> scoreCounts) {
+        this.firstKeywordCount = scoreCounts.get(0);
+        this.secondKeywordCount = scoreCounts.get(1);
+        this.lastKeywordCount = scoreCounts.get(2);
     }
 }

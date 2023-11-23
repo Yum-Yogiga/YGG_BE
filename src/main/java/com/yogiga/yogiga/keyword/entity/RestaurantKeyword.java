@@ -32,4 +32,8 @@ public class RestaurantKeyword {
     public void updateScore(double score) {
         this.score = score;
     }
+
+    public int getScoreCount() {
+        return (int) (score * 100.0);
+    }
 }

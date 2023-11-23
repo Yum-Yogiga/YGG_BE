@@ -4,6 +4,8 @@ import com.yogiga.yogiga.global.config.S3Uploader;
 import com.yogiga.yogiga.global.config.WebClientUtil;
 import com.yogiga.yogiga.global.exception.CustomException;
 import com.yogiga.yogiga.global.exception.ErrorCode;
+import com.yogiga.yogiga.keyword.entity.RestaurantKeyword;
+import com.yogiga.yogiga.keyword.repository.RestaurantKeywordRepository;
 import com.yogiga.yogiga.restaurant.dto.MenuDto;
 import com.yogiga.yogiga.restaurant.dto.RestaurantDto;
 import com.yogiga.yogiga.restaurant.dto.RestaurantResponseDto;
@@ -27,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +42,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
     private final RestaurantLikesRepository restaurantLikesRepository;
+    private final RestaurantKeywordRepository restaurantKeywordRepository;
     private final MenuRepository menuRepository;
     @Value("${ai.api.url}")
     private String aiApiUrl;
@@ -49,7 +54,16 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Transactional(readOnly = true)
     public RestaurantResponseDto getResById(Long restaurantId) {
         Restaurant restaurant = findRestaurant(restaurantId);
-        return RestaurantResponseDto.toDto(restaurant);
+        List<RestaurantKeyword> restaurantKeywords = restaurantKeywordRepository.findByRestaurant(restaurant);
+
+        List<Integer> collect = restaurantKeywords.stream()
+                .map(RestaurantKeyword::getScoreCount)
+                .collect(Collectors.toList());
+
+        RestaurantResponseDto restaurantResponseDto = RestaurantResponseDto.toDto(restaurant);
+        restaurantResponseDto.setTopKeywordCount(collect);
+
+        return restaurantResponseDto;
     }
 
     @Override
