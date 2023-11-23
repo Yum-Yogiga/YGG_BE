@@ -4,6 +4,7 @@ import com.yogiga.yogiga.global.config.S3Uploader;
 import com.yogiga.yogiga.global.config.WebClientUtil;
 import com.yogiga.yogiga.global.exception.CustomException;
 import com.yogiga.yogiga.global.exception.ErrorCode;
+import com.yogiga.yogiga.keyword.dto.KeywordCountDto;
 import com.yogiga.yogiga.keyword.entity.RestaurantKeyword;
 import com.yogiga.yogiga.keyword.repository.RestaurantKeywordRepository;
 import com.yogiga.yogiga.restaurant.dto.MenuDto;
@@ -57,14 +58,14 @@ public class RestaurantServiceImpl implements RestaurantService {
         List<RestaurantKeyword> restaurantKeywords = restaurantKeywordRepository.findByRestaurant(restaurant);
 
 
-        Map<String, Integer> topKeywords = restaurantKeywords
+        List<KeywordCountDto> topKeywords = restaurantKeywords
                 .stream()
                 .sorted((k1, k2) -> Integer.compare(k2.getScoreCount(), k1.getScoreCount()))
                 .limit(3)
-                .collect(Collectors.toMap(
-                        keyword -> keyword.getKeyword().getName(),
-                        RestaurantKeyword::getScoreCount
-                ));
+                .map(keyword ->
+                        KeywordCountDto.toDto(keyword.getKeyword().getName(), keyword.getScoreCount())
+                )
+                .collect(Collectors.toList());
 
         RestaurantResponseDto restaurantResponseDto = RestaurantResponseDto.toDto(restaurant);
         restaurantResponseDto.setTopKeywordCount(topKeywords);
