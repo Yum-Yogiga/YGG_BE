@@ -1,5 +1,6 @@
 package com.yogiga.yogiga.restaurant.dto;
 
+import com.yogiga.yogiga.keyword.dto.KeywordCountDto;
 import com.yogiga.yogiga.restaurant.entity.Restaurant;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -33,7 +34,7 @@ public class RestaurantResponseDto {
 
     private Integer dislikeCount;
 
-    private Map<String, Integer> keywordCount;
+    private List<KeywordCountDto> keywordCounts;
 
     private List<MenuResponseDto> menuList;
 
@@ -53,7 +54,7 @@ public class RestaurantResponseDto {
                 .build();
     }
 
-    public void setTopKeywordCount(Map<String, Integer> topKeywords) {
-        this.keywordCount = topKeywords;
+    public void setTopKeywordCount(List<KeywordCountDto> topKeywords) {
+        this.keywordCounts = topKeywords;
     }
 }
