@@ -34,6 +34,9 @@ public class RestaurantResponseDto {
 
     private Integer dislikeCount;
 
+    private Double latitude; // 위도
+    private Double longitude; // 경도
+
     private List<KeywordCountDto> keywordCounts;
 
     private List<MenuResponseDto> menuList;
@@ -47,6 +50,8 @@ public class RestaurantResponseDto {
                 .tel(restaurant.getTel())
                 .openingHours(restaurant.getOpeningHours())
                 .likeCount(restaurant.getLikeCount())
+                .latitude(restaurant.getLatitude())
+                .longitude(restaurant.getLongitude())
                 .dislikeCount(restaurant.getDislikeCount())
                 .menuList(restaurant.getMenuList().stream()
                         .map(MenuResponseDto::toDto)
