@@ -3,10 +3,7 @@ package com.yogiga.yogiga.restaurant.entity;
 import com.yogiga.yogiga.global.entity.BaseTimeEntity;
 import com.yogiga.yogiga.restaurant.dto.RestaurantDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
@@ -15,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,12 +32,17 @@ public class Restaurant extends BaseTimeEntity {
     private String tel;
 
     private String openingHours;
+
     @ColumnDefault("0")
     @Column(nullable = false)
     private Integer likeCount;
+
     @ColumnDefault("0")
     @Column(nullable = false)
     private Integer dislikeCount;
+
+    private Double latitude; // 위도
+    private Double longitude; // 경도
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Menu> menuList = new ArrayList<>();
